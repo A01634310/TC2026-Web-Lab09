@@ -1,0 +1,109 @@
+<div class="container">
+  <div class="jumbotron">
+    <h1 class="text-center"><span class="fa fa-fire"></span> Hot Restaurant</h1>
+    <hr />
+    <h2 class="text-center">Current Reservations and Waiting List</h2>
+    <br />
+
+    <div class="text-center">
+      <a href="/reserve"
+        ><button class="btn btn-lg btn-danger">
+          <span class="fa fa-credit-card"></span> Make Reservation
+        </button></a
+      >
+      <a href="/"
+        ><button class="btn btn-lg btn-default">
+          <span class="fa fa-home"></span></button
+      ></a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <!-- Current Tables in Use -->
+      <div class="card">
+        <div class="card-header">
+          <h4>Current Reservations</h4>
+        </div>
+        <div class="card-body">
+          <ul id="tableList" class="list-group">
+            {{#each reservaciones}}
+              <li class="list-group-item mt-4">
+                <h2>Table #  {{@index}}   </h2>
+                <hr>
+                <h2>ID: {{customerID}}</h2>
+                <h2>Name:  {{customerName}}</h2>
+                <h2>Email: {{customerEmail}}</h2>
+                <h2>Phone: {{phoneNumber}}</h2>
+                <button
+                    type="button"
+                    class="tables-check-off btn btn-secondary"
+                    data-num={{@index}}
+                >
+                  Check off
+                </button>
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Waiting List Card -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h4>Waiting List</h4>
+        </div>
+        <div class="card-body">
+          <ul id="waitList" class="list-group">
+            {{#each listaEspera}}
+              <li class="list-group-item mt-4">
+                <h2>Table #  {{@index}}   </h2>
+                <hr>
+                <h2>ID: {{customerID}}</h2>
+                <h2>Name:  {{customerName}}</h2>
+                <h2>Email: {{customerEmail}}</h2>
+                <h2>Phone: {{phoneNumber}}</h2>
+                <button
+                    type="button"
+                    class="waitList-check-off btn btn-secondary"
+                    data-num="{{@index}}"
+                >
+                  Check off
+                </button>
+                {{#if sendEmail}}
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        data-num="{{@index}}"
+                        disabled
+                    >
+                      Emailing when available
+                    </button>
+                {{else}}
+                    <button
+                        type="button"
+                        class="waitList-send-email btn btn-info"
+                        data-num="{{@index}}"
+                    >
+                        Send email
+                    </button>
+                {{/if}}
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer mt-4">
+    <div class="container">
+      <p>Control Panel</p>
+      <p>
+        <a href="#" id="clear">Clear Table</a> |
+        <a href="/api/tables">API Table Link</a> |
+        <a href="/api/waitlist">API Wait List</a>
+      </p>
+    </div>
+  </footer>
+</div>

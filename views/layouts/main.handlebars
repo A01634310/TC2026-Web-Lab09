@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tables Page</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body>
+    {{{body}}}
+  </body>
+</html>
+<script type="text/javascript">
+  $.post("/api/countone");
+
+  $("#table-reservation").submit((event) => {
+    event.preventDefault();
+    const reservation = {
+      customerName: $("#reserve-name").val(),
+      customerEmail: $("#reserve-email").val(),
+      customerID: $("#reserve-unique-id").val(),
+      phoneNumber: $("#reserve-phone").val(),
+    };
+    $.post("/api/reservar", reservation, (data) => {
+      alert(data.msg);
+      document.location = "/tables";
+    });
+  });
+
+  $("body").on("click", ".tables-check-off", function (e) {
+    alert(`Ejecutando operación, esto puede tardar`);
+    $.ajax({
+      url: `/api/remove_table/${$(this).data("num")}`,
+      method: "DELETE",
+    }).then(function (data) {
+      alert(`${data.msg}.\n${data.url ? data.url : ""}`);
+      document.location = "/tables";
+    });
+  });
+
+  $("body").on("click", ".waitList-check-off", function (e) {
+    $.ajax({
+      url: `/api/remove_waitlist/${$(this).data("num")}`,
+      method: "DELETE",
+    }).then(function (data) {
+      alert(data.msg);
+      document.location = "/tables";
+    });
+  });
+
+  $("body").on("click", ".waitList-send-email", function (e) {
+    $.ajax({
+      url: `/api/waitlist_mark_email/${$(this).data("num")}`,
+      method: "POST",
+    }).then(function (data) {
+      alert(data.msg);
+      document.location = "/tables";
+    });
+  });
+</script>

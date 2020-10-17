@@ -1,4 +1,5 @@
 var express = require("express");
+var exphbs = require("express-handlebars");
 var app = express();
 var path = require("path");
 var nodemailer = require("nodemailer");
@@ -7,6 +8,8 @@ const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 
 var PORT = 3000;
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.listen(PORT, () => {
@@ -100,7 +103,7 @@ app.delete("/api/remove_table/:table_number", jsonParser, (req, res) => {
   reservaciones.splice(req.params.table_number, 1);
   const siguienteMesa = listaEspera.shift();
   reservaciones.push(siguienteMesa);
-  if (siguienteMesa.sendEmail) {
+  if (siguienteMesa && siguienteMesa.sendEmail) {
     sendMail(siguienteMesa.customerEmail).then((data) => {
       res.send({
         msg:
@@ -125,13 +128,18 @@ app.delete("/api/remove_waitlist/:table_number", jsonParser, (req, res) => {
 // RUTAS DE FRONT-END //////////////////////////////////////////////////////////
 
 app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "home.html"));
+  res.render("home", {
+    visits: visitCount,
+  });
 });
 
 app.get("/reserve", function (req, res) {
-  res.sendFile(path.join(__dirname, "reserve.html"));
+  res.render("reserve");
 });
 
 app.get("/tables", function (req, res) {
-  res.sendFile(path.join(__dirname, "tables.html"));
+  res.render("tables", {
+    reservaciones: reservaciones,
+    listaEspera: listaEspera,
+  });
 });
